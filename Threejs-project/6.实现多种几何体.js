@@ -65,19 +65,19 @@ function createCube(){
             w: Math.floor(Math.random() * (3 - 1 + 1) + 1),
             h: Math.floor(Math.random() * (3 - 1 + 1) + 1),
             d: Math.floor(Math.random() * (3 - 1 + 1) + 1),
-            x: Math.floor(Math.random() * (25 - -5 + 1) + -5),
-            y: Math.floor(Math.random() * (35 - -5 + 1) + -5),
-            z: Math.floor(Math.random() * (25 - -5 + 1) + -5),
+            x: Math.floor(Math.random() * (5 - -5 + 1) + -5),
+            y: Math.floor(Math.random() * (5 - -5 + 1) + -5),
+            z: Math.floor(Math.random() * (5 - -5 + 1) + -5),
         }
         cubeInfoArr.push(obj)
     }
     cubeInfoArr.map(item=>{
-        // 创建图形 //线物体LineBasicMaterial，也需要使⽤线材质配合Line(3D)
+        // 创建图形
         const geometry = new THREE.BoxGeometry(item.w, item.h, item.d)
         // 创建材质
-        const material = new THREE.LineBasicMaterial({color:item.color})
+        const material = new THREE.MeshBasicMaterial({color:item.color})
         // 创建物体网格对象, 并且图形与材质加载的物体网格对象中
-        cube = new THREE.Line(geometry, material)
+        cube = new THREE.Mesh(geometry, material)
         // 给创建的立方体定以名称
         cube.name = "cn"
         cube.position.set(item.x,item.y,item.z)
@@ -85,96 +85,27 @@ function createCube(){
     })
     scene.add(group)
 }
-function asd(){
-    const geometry = new THREE.BoxGeometry(15, 10, 10);
-    const imgUrlArr = ['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg']
-    // 纹理加载器
-    const textureLoader = new THREE.TextureLoader()
-    // 公共的基础路径
-    textureLoader.setPath('image/park/')
-    const materialArr = imgUrlArr.map(item => {
-        const texture = textureLoader.load(item)
-        texture.colorSpace = THREE.SRGBColorSpace
-        return new THREE.MeshBasicMaterial({
-            map: texture,
-            side: THREE.DoubleSide//内部贴图
-        })
-    })
-    // 1. 调整摄像机位置到盒⼦中间
-    // 不能给 0 的原因：轨道控制器内部会取出摄像机初始位置坐变化
-    // camera.position.x = 0.1
-    //移动
-
-    const cube = new THREE.Mesh(geometry, materialArr);
-    // 2. 调整⽴⽅体沿着 z 轴做 -1 缩⼩（镜⾯翻转）
-    cube.scale.set(1, 1, -1)
-    cube.position.x=15
-    scene.add(cube);
-}
-// 创建球形
+// 创建球体
 function createCircle(){
     
     //圆形缓和几何体
     //创建图形
     const geometry = new THREE.CircleGeometry(5, 32)
     //创建材质
-    const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
+    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
     const circle = new THREE.Mesh(geometry, material)
     // circle.position.set(10,10,10)
     circle.position.set(10, 10, 10)
     scene.add(circle)
 }
-// //创建球体几何图形
+// //创建球形几何图形
 function createSphere(){
-    // const geometry = new THREE.SphereGeometry(5, 20, 40)
-    // //// 2. 创建材质，颜色为绿色 0x00ff00
-    // const material = new THREE.LineBasicMaterial({ color: '#3a8cb8', size: 0.05 })
-    // // 设置当前纹理加载器公共的基础路径
-    // // textureLoader.setPath('image/class/')
-    // const cube = new THREE.Line(geometry, material)
-    // cube.position.set(-10, 10, 10)
-    // scene.add(cube)
-
-    //创建几何图形
-    const geometry=new THREE.SphereGeometry(5, 20, 40)
-    // 2. 使⽤纹理加载器并创建⽹格材质对象
-    const texture = new THREE.TextureLoader().load('image/earth/earth.png')
-    // 立即使用纹理进行材质创建
-    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const geometry = new THREE.SphereGeometry(5, 20, 40)
+    //// 2. 创建材质，颜色为绿色 0x00ff00
+    const material = new THREE.MeshBasicMaterial({ color: '#3a8cb8' })
     const cube = new THREE.Mesh(geometry, material)
     cube.position.set(-10, 10, 10)
     scene.add(cube)
-}
-//创建视频
-function createPlaneMap() {
-    //创建平面 几何体
-    const geometry = new THREE.PlaneGeometry(10,10)
-    // 视频纹理
-    // 准备视频标签
-    const video = document.createElement('video')
-    video.src = 'video/mouse_cat.mp4'
-    video.muted = true// 静音
-    video.addEventListener('loadedmetadata', () => {// 加载视频完成
-        video.play()// 开始播放视频
-    })
-    // 创建视频纹理对象
-    const texture = new THREE.VideoTexture(video)
-    // 把视频纹理->贴到材质上
-    const material = new THREE.MeshBasicMaterial({ map: texture })
-    // 创建物体
-    const plane = new THREE.Mesh(geometry, material)
-    plane.position.y=15//移动
-    scene.add(plane)
-    // 控制按钮
-    const button = document.createElement('button')
-    button.innerHTML = '播放'
-    button.style.position = 'fixed'
-    button.style.left = '0'
-    button.style.bottom = '0'
-    document.body.appendChild(button)
-    button.addEventListener('click', () => {
-        video.muted = false // 关闭静⾳
-    })
 }
 // 创建轨道控制器
 function createControls(){
@@ -211,23 +142,6 @@ function animate(){
 
     //将场景更新到画布
     renderer.render(scene, camera);
-}
-////线物体
-function createLine(){
-    const points=[]
-    points.push(new THREE.Vector3(-1, 3, 0));// 1尾部
-    points.push(new THREE.Vector3(0, 1, 0));// 1头部
-    points.push(new THREE.Vector3(1, 3, 0));// 2尾部
-    points.push(new THREE.Vector3(0, 1, 0));// 2头部
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const material = new THREE.LineBasicMaterial({
-        color: 0x0000ff
-    });
-    // Line: ⼀条连续的线
-    // LineLoop: ⼀条从头链接到尾的闭合线
-    // LineSegments:按顺序⼀对点链接⼀条线
-    const line = new THREE.LineSegments(geometry, material);
-    scene.add(line);
 }
 // 坐标轴
 function createHelper(){
@@ -323,17 +237,12 @@ function removeCube(){
 
 init()
 createGruop()
-asd()
-//视频
-createPlaneMap()
 //创建球体
 createCircle()
 //创建立方体
-createCube()
+// createCube()
 //创建球体几何体
 createSphere()
-//线物体
-createLine()
 
 // 调用轨道控制器的方法
 createControls()

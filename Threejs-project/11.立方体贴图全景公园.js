@@ -102,13 +102,10 @@ function asd(){
     })
     // 1. 调整摄像机位置到盒⼦中间
     // 不能给 0 的原因：轨道控制器内部会取出摄像机初始位置坐变化
-    // camera.position.x = 0.1
-    //移动
-
+    // camera.position.z = 0.1
     const cube = new THREE.Mesh(geometry, materialArr);
     // 2. 调整⽴⽅体沿着 z 轴做 -1 缩⼩（镜⾯翻转）
     cube.scale.set(1, 1, -1)
-    cube.position.x=15
     scene.add(cube);
 }
 // 创建球形
@@ -144,37 +141,6 @@ function createSphere(){
     const cube = new THREE.Mesh(geometry, material)
     cube.position.set(-10, 10, 10)
     scene.add(cube)
-}
-//创建视频
-function createPlaneMap() {
-    //创建平面 几何体
-    const geometry = new THREE.PlaneGeometry(10,10)
-    // 视频纹理
-    // 准备视频标签
-    const video = document.createElement('video')
-    video.src = 'video/mouse_cat.mp4'
-    video.muted = true// 静音
-    video.addEventListener('loadedmetadata', () => {// 加载视频完成
-        video.play()// 开始播放视频
-    })
-    // 创建视频纹理对象
-    const texture = new THREE.VideoTexture(video)
-    // 把视频纹理->贴到材质上
-    const material = new THREE.MeshBasicMaterial({ map: texture })
-    // 创建物体
-    const plane = new THREE.Mesh(geometry, material)
-    plane.position.y=15//移动
-    scene.add(plane)
-    // 控制按钮
-    const button = document.createElement('button')
-    button.innerHTML = '播放'
-    button.style.position = 'fixed'
-    button.style.left = '0'
-    button.style.bottom = '0'
-    document.body.appendChild(button)
-    button.addEventListener('click', () => {
-        video.muted = false // 关闭静⾳
-    })
 }
 // 创建轨道控制器
 function createControls(){
@@ -324,8 +290,6 @@ function removeCube(){
 init()
 createGruop()
 asd()
-//视频
-createPlaneMap()
 //创建球体
 createCircle()
 //创建立方体
